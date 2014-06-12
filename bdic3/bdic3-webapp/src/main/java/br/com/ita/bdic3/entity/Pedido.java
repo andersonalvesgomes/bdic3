@@ -1,7 +1,10 @@
 package br.com.ita.bdic3.entity;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,10 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PEDIDO")
+@Table(name = "pedido")
 public class Pedido {
 	
 	@Id
@@ -26,6 +31,16 @@ public class Pedido {
 	@ManyToOne
 	@JoinColumn(name = "cli_id")
 	private Cliente cliente;
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "pedido" )
+	private List<PedidoHasProduto> produtos;
+	
+	@OneToOne(cascade=CascadeType.ALL, mappedBy= "pedido")
+	private Pagamento pagamento;
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn
+	private Transacao transacao;
 
 	public Long getId() {
 		return id;
@@ -51,11 +66,43 @@ public class Pedido {
 		this.cliente = cliente;
 	}
 	
-	@Override
-	public String toString() {
-		return "Pedido=[id="+ id
-				+ ", data=" + data.toString()
-//				+ "cliente=" + cliente.getNome()
-				+ "]";
+	public List<PedidoHasProduto> getProdutos() {
+		return produtos;
+	}
+
+	public void setProdutos(List<PedidoHasProduto> produtos) {
+		for (PedidoHasProduto pedHas : produtos){
+			pedHas.setPedido(this);
+		}
+		this.produtos = produtos;
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
+	public Transacao getTransacao() {
+		return transacao;
+	}
+
+	public void setTransacao(Transacao transacao) {
+		this.transacao = transacao;
+	}
+
+	public BigDecimal getValorTotal() {
+		BigDecimal valorTotal = BigDecimal.ZERO;
+		List<PedidoHasProduto> produtos = getProdutos();
+		
+		for (PedidoHasProduto produto : produtos) {
+			valorTotal = valorTotal.add(
+							produto.getPreco().multiply(
+								new BigDecimal(produto.getQuantidade()))); 
+		}
+		
+		return valorTotal;
 	}
 }

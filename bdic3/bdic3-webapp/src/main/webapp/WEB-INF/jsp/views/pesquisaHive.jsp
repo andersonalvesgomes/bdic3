@@ -1,0 +1,48 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+	trimDirectiveWhitespaces="true"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ taglib prefix="security"
+	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="util" tagdir="/WEB-INF/tags/util"%>
+<%@ taglib prefix="tb" uri="/WEB-INF/taglib/taglib.tld"%>
+
+<%-- Emppty dust.js template --%>
+
+<h1>Pesquisa Hive</h1>
+
+<c:if test="${not empty mensagemErro}">
+	<h3>${mensagemErro}</h3>
+</c:if>
+<form:form id="validacaoForm" action="/bdic3/hive/p" modelAttribute="pesquisaHive" method="POST">
+  <div class="form-group">
+    <label for="valorInicial">Valor de</label>
+    <form:input path="valorInicial" cssClass="form-control"  placeholder="Entre com o valor  R$" />
+     <label for="valorFinal">Até</label>
+    <form:input path="valorFinal" cssClass="form-control"  placeholder="Entre com o valor  R$" />
+  </div>
+  <div class="form-group">
+    <label for="dataInicial">Data Incial</label>
+    <form:input path="dataInicial" cssClass="form-control"   placeholder="dd/mm/yyyy" />
+    <label for="dataFinal">Data Final</label>
+    <form:input path="dataFinal" cssClass="form-control" placeholder="dd/mm/yyyy" />
+  </div>
+  <div class="form-group">
+    <form:select path="localidade" cssClass="form-control">
+    <form:option value="" label="--- Select ---"/>
+  		<form:options items="${localidades}" /> 
+	</form:select> 
+  </div>
+ 
+  <button type="button" class="btn btn-primary" onclick="envia();">Enviar</button> 
+</form:form>
+<script>
+function envia(){
+	$.ajax({type:'POST', url: '/bdic3/hive/pesquisar', data: $('#validacaoForm').serialize()});
+	alert("Solicitacao enviada com sucesso");
+}
+</script>

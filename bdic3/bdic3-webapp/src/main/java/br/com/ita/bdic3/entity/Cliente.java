@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import br.com.ita.bdic3.enums.Sexo;
 
 @Entity
-@Table(name = "CLIENTE")
+@Table(name = "cliente")
 public class Cliente implements Serializable{
 	
 	private static final long serialVersionUID = -6199970951870939653L;
@@ -57,6 +57,16 @@ public class Cliente implements Serializable{
 
 //	@OneToOne(mappedBy = "id")
 //	private Usuario usuario;
+	
+
+	public Cliente(Long id) {
+		this.id = id;
+	}
+
+	public Cliente() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public Long getId() {
 		return id;

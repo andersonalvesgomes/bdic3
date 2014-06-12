@@ -10,19 +10,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PRODUTO")
+@Table(name = "produto")
 public class Produto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "prod_id")
+	@Column(name = "prd_id")
 	private Long id;
 	
-	@Column(name = "prod_nome")
+	@Column(name = "prd_nome")
 	private String nome;
 	
-	@Column(name = "prod_preco_normal")
+	@Column(name = "prd_preco_normal")
 	private BigDecimal precoNormal;
+	
+	public Produto() {
+		super();
+	}
+
+	public Produto(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
